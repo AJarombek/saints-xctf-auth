@@ -1,1 +1,4 @@
 .idea
+rotate/package
+rotate/venv
+dist

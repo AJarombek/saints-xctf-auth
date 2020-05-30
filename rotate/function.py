@@ -6,7 +6,7 @@ Date: 5/25/2020
 
 import boto3
 import json
-from typing import Optional, Any
+from typing import Optional
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend as crypto_default_backend
 from cryptography.hazmat.primitives import serialization as crypto_serialization
@@ -17,8 +17,14 @@ from boto3_type_annotations.secretsmanager import Client
 def lambda_handler(event, context):
     secretsmanager: Client = boto3.client('secretsmanager')
 
+    # Amazon Resource Name (ARN) of the secret to rotate.
     secret_id = event['SecretId']
+
+    # A uuid that Secrets Manager passes to the Lambda function.  This becomes the VersionId of the new secret version.
     token = event['ClientRequestToken']
+
+    # Specifies which part of the rotation process to invoke.
+    # Values are amongst the set: { createSecret, setSecret, testSecret, finishSecret }.
     step = event['Step']
 
     secret_metadata = secretsmanager.describe_secret(SecretId=secret_id)
@@ -38,10 +44,16 @@ def lambda_handler(event, context):
         raise ValueError(f"Secret version {token} not set as AWSPENDING for rotation of secret {secret_id}.")
 
     if step == 'createSecret':
-        print(f"Invoking createSecret()")
+        print(f"Invoking createSecret().")
         create_secret(secretsmanager, secret_id, token)
+    elif step == 'setSecret':
+        print(f"Invoking setSecret().")
+        set_secret()
+    elif step == 'testSecret':
+        print(f"Invoking testSecret().")
+        test_secret()
     elif step == 'finishSecret':
-        print(f"Invoking finishSecret()")
+        print(f"Invoking finishSecret().")
         finish_secret(secretsmanager, secret_id, token)
     else:
         raise ValueError(f"Invalid step {step}.")
@@ -61,10 +73,10 @@ def create_secret(secretsmanager: Client, secret_id: str, token: str):
     try:
         # Check to see if there is already a pending secret.
         secretsmanager.get_secret_value(SecretId=secret_id, VersionId=token, VersionStage="AWSPENDING")
-        print(f"Successfully retreived secret: {secret_id}")
+        print(f"Successfully retreived secret: {secret_id}.")
     except secretsmanager.exceptions.ResourceNotFoundException:
         # If there is not a pending secret, create one.
-        print(f"Generating a key pair with token: {token}")
+        print(f"Generating a key pair with token: {token}.")
         private_key, public_key = generate_key_pair(token)
 
         current_dict['PublicKey'] = public_key
@@ -78,11 +90,41 @@ def create_secret(secretsmanager: Client, secret_id: str, token: str):
             SecretString=secret_string,
             VersionStages=['AWSPENDING']
         )
-        print(f"Successfully created secret with id: {secret_id}, and token: {token}")
+        print(f"Successfully created pending secret with id: {secret_id}, and token: {token}.")
+
+
+def set_secret():
+    print(f"setSecret not currently implemented.")
+    pass
+
+
+def test_secret():
+    print(f"testSecret not currently implemented.")
+    pass
 
 
 def finish_secret(secretsmanager: Client, secret_id: str, token: str):
-    pass
+    secret_metadata = secretsmanager.describe_secret(SecretId=secret_id)
+
+    new_version = token
+    current_version = None
+    for version in secret_metadata["VersionIdsToStages"]:
+        if "AWSCURRENT" in version:
+            if version == new_version:
+                print(f"Version {version} already marked as AWSCURRENT for secret {secret_id}.")
+                return
+
+            current_version = version
+            break
+
+    secretsmanager.update_secret_version_stage(
+        SecretId=secret_id,
+        VersionStage="AWSCURRENT",
+        MoveToVersionId=new_version,
+        RemoveFromVersionId=current_version
+    )
+
+    print(f"Successfully set AWSCURRENT stage to version {new_version} for secret {secret_id}.")
 
 
 def get_secret_dict(secretsmanager: Client, secret_id: str, stage: str, token: Optional[str] = None) -> dict:
