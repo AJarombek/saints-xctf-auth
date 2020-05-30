@@ -16,7 +16,9 @@ RUN mkdir /dist
 
 WORKDIR /src
 RUN pip3 install -r requirements.txt --target ./package \
-    && zip -r9 ../dist/SaintsXCTFRotate.zip ./package \
+    && cd package \
+    && zip -r9 ../../dist/SaintsXCTFRotate.zip . \
+    && cd - \
     && zip -g ../dist/SaintsXCTFRotate.zip function.py
 
 ENTRYPOINT ["sleep", "infinity"]

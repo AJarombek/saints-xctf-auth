@@ -109,7 +109,7 @@ def finish_secret(secretsmanager: Client, secret_id: str, token: str):
     new_version = token
     current_version = None
     for version in secret_metadata["VersionIdsToStages"]:
-        if "AWSCURRENT" in version:
+        if "AWSCURRENT" in secret_metadata["VersionIdsToStages"][version]:
             if version == new_version:
                 print(f"Version {version} already marked as AWSCURRENT for secret {secret_id}.")
                 return
