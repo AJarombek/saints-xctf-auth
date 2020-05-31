@@ -10,3 +10,5 @@ class User(Base):
     username = Column(VARCHAR(20), primary_key=True)
     first = Column(VARCHAR(30), nullable=False, index=True)
     last = Column(VARCHAR(30), nullable=False, index=True)
+    password = Column(VARCHAR(255), nullable=False)
+    email = Column(VARCHAR(50), index=True)

@@ -7,11 +7,18 @@ Date: 5/31/2020
 import os
 import boto3
 import json
+import re
+from datetime import datetime
+from typing import Any
 
 import jwt
+import bcrypt
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from boto3_type_annotations.secretsmanager import Client as SecretsManagerClient
 from boto3_type_annotations.rds import Client as RDSClient
+
+from User import User
 
 
 def lambda_handler(event):
@@ -20,26 +27,88 @@ def lambda_handler(event):
     env = os.environ['ENV']
 
     secretsmanager: SecretsManagerClient = boto3.client('secretsmanager')
+    rds: RDSClient = boto3.client('rds')
+
+    private_key = get_jwt_private_key(secretsmanager, env)
+    db_secret = get_rds_credentials(secretsmanager, env)
+    session = create_database_session(rds, db_secret, env)
+
+    email_pattern = re.compile('^(([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\\.([a-zA-Z])+([a-zA-Z])+)?$')
+
+    if email_pattern.match(client_id):
+        user = session.query(User).filter_by(email=client_id).first()
+    else:
+        user = session.query(User).filter_by(username=client_id).first()
+
+    if user is None:
+        print(f"No user exists with username/email: {client_id}")
+        return None
+    else:
+        if bcrypt.checkpw(client_secret, user.password):
+            iat = int(datetime.utcnow().timestamp())
+            exp = iat + 3600
+
+            return jwt.encode(
+                payload={
+                    'iat': iat,
+                    'exp': exp,
+                    'iss': 'auth.saintsxctf.com'
+                },
+                key=private_key,
+                algorithm='RS256'
+            )
+        else:
+            print(f"Invalid password for user with username/email: {client_id}")
+            return None
+
+
+def get_jwt_private_key(secretsmanager: SecretsManagerClient, env: str) -> str:
+    """
+    Get the RSA encrypted private key used to create JWT tokens.
+    :param secretsmanager: boto3 client for working with SecretsManager.
+    :param env: Environment of the SaintsXCTF authentication private key.
+    :return: A string representing the RSA encrypted private key.
+    """
     secret = secretsmanager.get_secret_value(SecretId=f"saints-xctf-auth-{env}")
 
     secret_string = secret.get('SecretString')
     secret_dict: dict = json.loads(secret_string)
-    public_key = secret_dict["PublicKey"]
+    return secret_dict["PrivateKey"]
 
+
+def get_rds_credentials(secretsmanager: SecretsManagerClient, env: str) -> dict:
+    """
+    Get the RDS username and password.
+    :param secretsmanager: boto3 client for working with SecretsManager.
+    :param env: Environment of the SaintsXCTF database.
+    :return: A dictionary containing username and password keys.
+    """
     response = secretsmanager.get_secret_value(SecretId=f'saints-xctf-rds-{env}-secret')
     secret_string = response.get("SecretString")
-    secret_dict = json.loads(secret_string)
+    return json.loads(secret_string)
 
-    rds: RDSClient = boto3.client('rds')
+
+def create_database_session(rds: RDSClient, db_secret: dict, env: str) -> Any:
+    """
+    Create a database session with RDS in a given environment.
+    :param rds: boto3 client for working with RDS.
+    :param db_secret: Dictionary containing the username and password for the SaintsXCTF RDS/MySQL database.
+    :param env: Environment of the SaintsXCTF database.
+    :return: A session with the database.
+    """
     rds_instances = rds.describe_db_instances(DBInstanceIdentifier=f'saints-xctf-mysql-database-{env}')
     instance = rds_instances.get('DBInstances')[0]
     hostname = instance.get('Endpoint').get('Address')
 
-    username = secret_dict.get("username")
-    password = secret_dict.get("password")
+    username = db_secret.get("username")
+    password = db_secret.get("password")
     database = 'saintsxctf'
 
     db_url = f'mysql+pymysql://{username}:{password}@{hostname}/{database}'
 
     engine = create_engine(db_url)
 
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+
+    return Session()
