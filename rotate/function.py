@@ -6,11 +6,11 @@ Date: 5/25/2020
 
 import boto3
 import json
-from typing import Optional
+from typing import Optional, Tuple
+
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend as crypto_default_backend
 from cryptography.hazmat.primitives import serialization as crypto_serialization
-
 from boto3_type_annotations.secretsmanager import Client
 
 
@@ -61,12 +61,11 @@ def lambda_handler(event, context):
 
 def create_secret(secretsmanager: Client, secret_id: str, token: str):
     """
-    Check to see if a secret already exists with the given token.  If it doesn't exist, create a
-    new secret with the token.
+    Begin the process of rotating a secret by creating a new secret which will be in a pending stage.  Check to see if
+    a secret already exists with the given token.  If it doesn't exist, create a new secret with the token.
     :param secretsmanager: boto3 client for working with SecretsManager.
-    :param secret_id:
-    :param token:
-    :return:
+    :param secret_id: ARN of the secret which will be rotated.
+    :param token: Unique identifier which will be the version ID of the pending secret version.
     """
     current_dict = get_secret_dict(secretsmanager, secret_id, "AWSCURRENT")
 
@@ -104,6 +103,12 @@ def test_secret():
 
 
 def finish_secret(secretsmanager: Client, secret_id: str, token: str):
+    """
+    Finish the process of rotating a secret.  Make the pending secret version the new current secret.
+    :param secretsmanager: boto3 client for working with SecretsManager.
+    :param secret_id: ARN of the secret which is being rotated.
+    :param token: Unique identifier which will be the version ID of the new current secret version.
+    """
     secret_metadata = secretsmanager.describe_secret(SecretId=secret_id)
 
     new_version = token
@@ -128,6 +133,14 @@ def finish_secret(secretsmanager: Client, secret_id: str, token: str):
 
 
 def get_secret_dict(secretsmanager: Client, secret_id: str, stage: str, token: Optional[str] = None) -> dict:
+    """
+    Get the current secret value as a python dictionary.
+    :param secretsmanager: boto3 client for working with SecretsManager.
+    :param secret_id: ARN of the secret which will be rotated.
+    :param stage: Stage of the secret (ex. "AWSCURRENT", "AWSPENDING").
+    :param token: Unique identifier which will be the version ID of the new secret version.
+    :return: A python dictionary containing a PrivateKey and PublicKey.
+    """
     if token:
         secret = secretsmanager.get_secret_value(SecretId=secret_id, VersionId=token, VersionStage=stage)
     else:
@@ -137,7 +150,12 @@ def get_secret_dict(secretsmanager: Client, secret_id: str, stage: str, token: O
     return json.loads(secret_string)
 
 
-def generate_key_pair(comment):
+def generate_key_pair(comment) -> Tuple[str]:
+    """
+    Generate a new public/private key pair using RSA encryption.
+    :param comment: Comment to append to the public key.
+    :return: A tuple containing a private key and a public key
+    """
     key = rsa.generate_private_key(
         backend=crypto_default_backend(),
         public_exponent=65537,

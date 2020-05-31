@@ -1,0 +1,67 @@
+"""
+AWS Lambda authorizer function used to either accept or deny entry to another lambda function from API Gateway.
+Author: Andrew Jarombek
+Date: 5/31/2020
+"""
+
+import boto3
+import os
+import json
+
+import jwt
+from boto3_type_annotations.secretsmanager import Client
+
+
+def lambda_handler(event, context):
+    token = event['authorizationToken']
+    env = os.environ['ENV']
+
+    secretsmanager: Client = boto3.client('secretsmanager')
+    secret = secretsmanager.get_secret_value(SecretId=f"saints-xctf-auth-{env}")
+
+    secret_string = secret['SecretString']
+    secret_dict: dict = json.loads(secret_string)
+
+    try:
+        decoded = jwt.decode(
+            jwt=token,
+            key=secret_dict["PublicKey"],
+            verify=True,
+            algorithms='RS256',
+            options={'require': ['exp', 'iat', 'iss']}
+        )
+    except jwt.ExpiredSignatureError:
+        # The date of the 'exp' claim is in the past, meaning the token is expired
+        pass
+
+
+def allow_policy(method_arn: str) -> dict:
+    return {
+        "PrincipalId": "apigateway.amazonaws.com",
+        "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Action": "execute-api:Invoke",
+                    "Effect": "Allow",
+                    "Resource": "methodArn"
+                }
+            ]
+        }
+    }
+
+
+def deny_policy() -> dict:
+    return {
+        "PrincipalId": "*",
+        "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Action": "*",
+                    "Effect": "Deny",
+                    "Resource": "*"
+                }
+            ]
+        }
+    }
