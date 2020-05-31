@@ -1,3 +1,9 @@
+Overview
+--------
+
+AWS Lambda function which rotates a secret in Secrets Manager.  This secret is a public and private key created with
+RSA encryption.  The private key is used to create JWTs and the public key is used to validate JWTs.
+
 Commands
 --------
 
@@ -53,6 +59,19 @@ Commands
     pip3 install -r requirements.txt --target ./package
     zip -r9 ../dist/SaintsXCTFRotate.zip ./package
     zip -g ../dist/SaintsXCTFRotate.zip function.py
+
+Files
+-----
+
++-----------------------------+----------------------------------------------------------------------------------------------+
+| Filename                    | Description                                                                                  |
++=============================+==============================================================================================+
+| ``Dockerfile``              | Used for building the ``rotate`` AWS Lambda function in an Amazon Linux environment.         |
++-----------------------------+----------------------------------------------------------------------------------------------+
+| ``function.py``             | AWS Lambda function handler method.                                                          |
++-----------------------------+----------------------------------------------------------------------------------------------+
+| ``requirements.txt``        | Pip dependencies for the AWS Lambda function.                                                |
++-----------------------------+----------------------------------------------------------------------------------------------+
 
 Resources
 ---------

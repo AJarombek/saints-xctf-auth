@@ -7,6 +7,7 @@ Date: 5/31/2020
 import boto3
 import os
 import json
+import traceback
 
 import jwt
 from boto3_type_annotations.secretsmanager import Client
@@ -34,8 +35,11 @@ def lambda_handler(event):
         return allow_policy(method_arn)
     except jwt.ExpiredSignatureError:
         # The date of the 'exp' claim is in the past, meaning the token is expired
+        print("This token has expired.")
         return deny_policy()
-    except:
+    except Exception as e:
+        print("Unknown error occurred.")
+        traceback.print_exception(type(e), e, e.__traceback__)
         return deny_policy()
 
 

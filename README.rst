@@ -11,6 +11,20 @@ AWS Secrets Manager secret rotation or API Gateway lambda authorizers.
 Files
 -----
 
++-----------------------------+----------------------------------------------------------------------------------------------+
+| Filename                    | Description                                                                                  |
++=============================+==============================================================================================+
+| ``Dockerfile``              | Used for building Python 3.8 AWS Lambda functions in an Amazon Linux environment.            |
++-----------------------------+----------------------------------------------------------------------------------------------+
+| ``authenticate``            | AWS Lambda function which authenticates a JWT token for application users.                   |
++-----------------------------+----------------------------------------------------------------------------------------------+
+| ``authorizer``              | AWS Lambda function which allows or denies API Gateway to call another AWS Lambda function.  |
++-----------------------------+----------------------------------------------------------------------------------------------+
+| ``rotate``                  | AWS Lambda function which rotates a secret that is used to create JWTs in Secrets Manager.   |
++-----------------------------+----------------------------------------------------------------------------------------------+
+| ``token``                   | AWS Lambda function which creates a JWT token if valid user credentials are supplied.        |
++-----------------------------+----------------------------------------------------------------------------------------------+
+
 Resources
 ---------
 
