@@ -12,8 +12,9 @@ import jwt
 from boto3_type_annotations.secretsmanager import Client
 
 
-def lambda_handler(event, context):
+def lambda_handler(event):
     token = event['authorizationToken']
+    method_arn = event['methodArn']
     env = os.environ['ENV']
 
     secretsmanager: Client = boto3.client('secretsmanager')
@@ -23,16 +24,19 @@ def lambda_handler(event, context):
     secret_dict: dict = json.loads(secret_string)
 
     try:
-        decoded = jwt.decode(
+        jwt.decode(
             jwt=token,
             key=secret_dict["PublicKey"],
             verify=True,
             algorithms='RS256',
             options={'require': ['exp', 'iat', 'iss']}
         )
+        return allow_policy(method_arn)
     except jwt.ExpiredSignatureError:
         # The date of the 'exp' claim is in the past, meaning the token is expired
-        pass
+        return deny_policy()
+    except:
+        return deny_policy()
 
 
 def allow_policy(method_arn: str) -> dict:
@@ -44,7 +48,7 @@ def allow_policy(method_arn: str) -> dict:
                 {
                     "Action": "execute-api:Invoke",
                     "Effect": "Allow",
-                    "Resource": "methodArn"
+                    "Resource": method_arn
                 }
             ]
         }
