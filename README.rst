@@ -1,9 +1,15 @@
 saints-xctf-auth
 ================
 
+Overview
+--------
+
 Lambda functions used for authentication in the SaintsXCTF application.  Some of these AWS Lambda functions are part of
 the ``auth.saintsxctf.com`` domain (which is located behind API Gateway).  Others are standalone, used for purposes like
 AWS Secrets Manager secret rotation or API Gateway lambda authorizers.
+
+Files
+-----
 
 Resources
 ---------
