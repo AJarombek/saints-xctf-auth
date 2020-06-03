@@ -1,0 +1,25 @@
+"""
+Build file for the token lambda function Bazel package.
+Author: Andrew Jarombek
+Date: 6/3/2020
+"""
+
+load(":move.bzl", "move_file")
+
+# Custom rule for moving a source code file into the Bazel bin directory.  This rule doesn't add any functionality the
+# build at the moment, but it helpful to understand how Bazel works.
+move_file(
+    name = "copy_dockerfile",
+    src = "Dockerfile",
+    dest = "test/Dockerfile"
+)
+
+# Rule for running a bash script which generates the AWS Lambda zip file for the rotate function.
+sh_test(
+    name = "zip_token_lambda",
+    srcs = ["build.sh"],
+    data = ["Dockerfile", "function.py", "User.py"],
+    tags = ["bash", "docker"]
+)
+
+exports_files(["requirements.txt"])

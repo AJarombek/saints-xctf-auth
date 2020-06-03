@@ -1,0 +1,5 @@
+# Workspace for the saints-xctf-auth repository
+# Author: Andrew Jarombek
+# Date: 6/2/2020
+
+workspace(name = "saints_xctf_auth")

@@ -8,6 +8,18 @@ Lambda functions used for authentication in the SaintsXCTF application.  Some of
 the ``auth.saintsxctf.com`` domain (which is located behind API Gateway).  Others are standalone, used for purposes like
 AWS Secrets Manager secret rotation or API Gateway lambda authorizers.
 
+Commands
+--------
+
+.. code-block:: bash
+
+    bazel clean
+
+    bazel build //:all
+    bazel build //token:all
+
+    bazel run //:build_lambda_docker_image
+
 Files
 -----
 

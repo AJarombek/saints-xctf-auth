@@ -21,7 +21,7 @@ from boto3_type_annotations.rds import Client as RDSClient
 from User import User
 
 
-def lambda_handler(event):
+def lambda_handler(event, context):
     client_id = event['clientId']
     client_secret = event['clientSecret']
     env = os.environ['ENV']

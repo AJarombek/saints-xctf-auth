@@ -1,0 +1,21 @@
+load(":move.bzl", "move_file")
+
+move_file(
+    name = "copy_pip_requirements",
+    src = "token/requirements.txt",
+    dest = "requirements.txt"
+)
+
+genrule(
+    name = "symlink_docker",
+    srcs = [":copy_pip_requirements"],
+    outs = ["rqmts.txt"],
+    cmd = "cp "
+)
+
+sh_test(
+    name = "build_lambda_docker_image",
+    srcs = ["build.sh"],
+    data = ["Dockerfile", ":copy_pip_requirements"],
+    tags = ["bash", "docker"]
+)

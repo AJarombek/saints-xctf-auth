@@ -13,7 +13,7 @@ import jwt
 from boto3_type_annotations.secretsmanager import Client
 
 
-def lambda_handler(event):
+def lambda_handler(event, context):
     token = event['token']
     env = os.environ['ENV']
 

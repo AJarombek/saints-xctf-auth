@@ -7,6 +7,20 @@ RSA encryption.  The private key is used to create JWTs and the public key is us
 Commands
 --------
 
+**Building with Bazel**
+
+.. code-block:: bash
+
+    # Execute these commands from the repositories root directory.
+    cd ..
+
+    bazel clean
+    bazel build //token:all
+
+    bazel run //token:zip_token_lambda
+
+**Building Manually in Bash**
+
 .. code-block:: bash
 
     AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials | sed -n '2p' | cut -d "=" -f2)
