@@ -11,14 +11,17 @@ AWS Secrets Manager secret rotation or API Gateway lambda authorizers.
 Commands
 --------
 
+**Create all AWS Lambda zip files with Bazel**
+
 .. code-block:: bash
 
     bazel clean
-
     bazel build //:all
-    bazel build //token:all
 
-    bazel run //:build_lambda_docker_image
+    bazel run //:generate_token_lambda_zip_file
+    bazel run //:generate_rotate_lambda_zip_file
+    bazel run //:generate_authorizer_lambda_zip_file
+    bazel run //:generate_authenticate_lambda_zip_file
 
 Files
 -----
@@ -43,3 +46,4 @@ Resources
 1) `Create Python AWS Lambda Function <https://docs.aws.amazon.com/lambda/latest/dg/python-package.html>`_
 2) `Docker Lambda Environment <https://github.com/lambci/docker-lambda>`_
 3) `Dockerfile for Lambda Zip File Creation <https://github.com/lambci/docker-lambda#using-a-dockerfile-to-build>`_
+4) `Bazel Shell Rules <https://docs.bazel.build/versions/master/be/shell.html>`_

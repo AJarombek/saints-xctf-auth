@@ -1,21 +1,33 @@
-load(":move.bzl", "move_file")
+"""
+Build file for the token lambda function Bazel package.
+Author: Andrew Jarombek
+Date: 6/3/2020
+"""
 
-move_file(
-    name = "copy_pip_requirements",
-    src = "token/requirements.txt",
-    dest = "requirements.txt"
-)
-
-genrule(
-    name = "symlink_docker",
-    srcs = [":copy_pip_requirements"],
-    outs = ["rqmts.txt"],
-    cmd = "cp "
+sh_test(
+    name = "generate_token_lambda_zip_file",
+    srcs = ["build.sh"],
+    args = ["token-lambda-dist"],
+    tags = ["bash", "docker"]
 )
 
 sh_test(
-    name = "build_lambda_docker_image",
+    name = "generate_rotate_lambda_zip_file",
     srcs = ["build.sh"],
-    data = ["Dockerfile", ":copy_pip_requirements"],
+    args = ["rotate-lambda-dist"],
+    tags = ["bash", "docker"]
+)
+
+sh_test(
+    name = "generate_authorizer_lambda_zip_file",
+    srcs = ["build.sh"],
+    args = ["authorizer-lambda-dist"],
+    tags = ["bash", "docker"]
+)
+
+sh_test(
+    name = "generate_authenticate_lambda_zip_file",
+    srcs = ["build.sh"],
+    args = ["authenticate-lambda-dist"],
     tags = ["bash", "docker"]
 )

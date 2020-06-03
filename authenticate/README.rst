@@ -8,31 +8,16 @@ users will be signed out.
 Commands
 --------
 
+**Building with Bazel**
+
 .. code-block:: bash
 
-    AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials | sed -n '2p' | cut -d "=" -f2)
-    AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:1}
+    # Execute these commands from the repositories root directory.
+    cd ..
 
-    AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials | sed -n '3p' | cut -d "=" -f2)
-    AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:1}
-
-    docker image build \
-        -f ../Dockerfile \
-        -t python-lambda-dist:latest \
-        --build-arg ZIP_FILENAME=SaintsXCTFAuthenticate .
-
-    docker image build -t authenticate-lambda-dist:latest .
-
-    docker container run -d  \
-        --name authenticate-lambda-dist \
-        --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
-        --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
-        authenticate-lambda-dist:latest
-
-    docker cp authenticate-lambda-dist:/dist .
-
-    docker container stop authenticate-lambda-dist
-    docker container rm authenticate-lambda-dist
+    bazel clean
+    bazel build //:all
+    bazel run //:generate_authenticate_lambda_zip_file
 
 Files
 -----

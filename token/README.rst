@@ -6,31 +6,16 @@ AWS Lambda function which creates JWT tokens.
 Commands
 --------
 
+**Building with Bazel**
+
 .. code-block:: bash
 
-    AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials | sed -n '2p' | cut -d "=" -f2)
-    AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:1}
+    # Execute these commands from the repositories root directory.
+    cd ..
 
-    AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials | sed -n '3p' | cut -d "=" -f2)
-    AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:1}
-
-    docker image build \
-        -f ../Dockerfile \
-        -t python-lambda-dist:latest \
-        --build-arg ZIP_FILENAME=SaintsXCTFToken .
-
-    docker image build -t token-lambda-dist:latest .
-
-    docker container run -d \
-        --name token-lambda-dist \
-        --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
-        --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
-        token-lambda-dist:latest
-
-    docker cp token-lambda-dist:/dist .
-
-    docker container stop token-lambda-dist
-    docker container rm token-lambda-dist
+    bazel clean
+    bazel build //:all
+    bazel run //:generate_token_lambda_zip_file
 
 Files
 -----

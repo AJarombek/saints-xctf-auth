@@ -1,3 +1,9 @@
+"""
+Model object for the 'user' table found in RDS/MySQL.
+Author: Andrew Jarombek
+Date: 5/31/2020
+"""
+
 from sqlalchemy import Column, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
 

@@ -15,11 +15,12 @@ Commands
     cd ..
 
     bazel clean
-    bazel build //token:all
+    bazel build //:all
+    bazel run //:generate_rotate_lambda_zip_file
 
-    bazel run //token:zip_token_lambda
+**For Reference: Building Manually in Bash**
 
-**Building Manually in Bash**
+ This is an outdated and non-automated approach.
 
 .. code-block:: bash
 

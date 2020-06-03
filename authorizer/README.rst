@@ -7,31 +7,16 @@ invoked in order to check if the user is authorized to make the request.
 Commands
 --------
 
+**Building with Bazel**
+
 .. code-block:: bash
 
-    AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials | sed -n '2p' | cut -d "=" -f2)
-    AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:1}
+    # Execute these commands from the repositories root directory.
+    cd ..
 
-    AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials | sed -n '3p' | cut -d "=" -f2)
-    AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:1}
-
-    docker image build \
-        -f ../Dockerfile \
-        -t python-lambda-dist:latest \
-        --build-arg ZIP_FILENAME=SaintsXCTFAuthorizer .
-
-    docker image build -t authorizer-lambda-dist:latest .
-
-    docker container run -d  \
-        --name authorizer-lambda-dist \
-        --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
-        --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
-        authorizer-lambda-dist:latest
-
-    docker cp authorizer-lambda-dist:/dist .
-
-    docker container stop authorizer-lambda-dist
-    docker container rm authorizer-lambda-dist
+    bazel clean
+    bazel build //:all
+    bazel run //:generate_authorizer_lambda_zip_file
 
 Files
 -----
