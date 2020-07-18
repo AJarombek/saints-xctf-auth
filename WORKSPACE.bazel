@@ -3,3 +3,31 @@
 # Date: 6/2/2020
 
 workspace(name = "saints_xctf_auth")
+
+container_pull(
+    name = "token-lambda-dist",
+    registry = "registry.hub.docker.com",
+    repository = "ajarombek/auth-saints-xctf-com-token",
+    tag = "latest"
+)
+
+container_pull(
+    name = "rotate-lambda-dist",
+    registry = "registry.hub.docker.com",
+    repository = "ajarombek/auth-saints-xctf-com-rotate",
+    tag = "latest"
+)
+
+container_pull(
+    name = "authorizer-lambda-dist",
+    registry = "registry.hub.docker.com",
+    repository = "ajarombek/auth-saints-xctf-com-authorizer",
+    tag = "latest"
+)
+
+container_pull(
+    name = "authenticate-lambda-dist",
+    registry = "registry.hub.docker.com",
+    repository = "ajarombek/auth-saints-xctf-com-authenticate",
+    tag = "latest"
+)

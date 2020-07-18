@@ -3,3 +3,4 @@ rotate/package
 rotate/venv
 dist
 bazel-*
+**/node_modules
