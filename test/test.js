@@ -11,17 +11,32 @@ const instance = axios.create({
     timeout: 1000
 });
 
-describe('token api', () => {
+describe('authenticate api', () => {
 
-    it('returns 401 by default', () => {
+    it('returns 403 by default', () => {
         instance
-            .get('/token')
+            .post('/authenticate')
             .then((res) => {
-                console.info(res);
+                expect(true).toBe(false);
             })
             .catch((err) => {
                 console.info(err);
+                expect(err.message).toEqual("Forbidden");
             });
     });
+});
 
+describe('token api', () => {
+
+    it('returns 403 by default', () => {
+        instance
+            .post('/token')
+            .then((res) => {
+                expect(true).toBe(false);
+            })
+            .catch((err) => {
+                console.info(err);
+                expect(err.message).toEqual("Forbidden");
+            });
+    });
 });

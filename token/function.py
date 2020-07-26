@@ -25,6 +25,7 @@ def lambda_handler(event, context):
     client_id = event['clientId']
     client_secret = event['clientSecret']
     env = os.environ['ENV']
+    print(f"Client: {client_id}, Environment: {env}")
 
     secretsmanager: SecretsManagerClient = boto3.client('secretsmanager')
     rds: RDSClient = boto3.client('rds')
@@ -32,19 +33,24 @@ def lambda_handler(event, context):
     private_key = get_jwt_private_key(secretsmanager, env)
     db_secret = get_rds_credentials(secretsmanager, env)
     session = create_database_session(rds, db_secret, env)
+    print("Database Session Initialized and Secrets Retrieved")
 
     email_pattern = re.compile('^(([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\\.([a-zA-Z])+([a-zA-Z])+)?$')
 
     if email_pattern.match(client_id):
+        print("Retrieving User by Email")
         user = session.query(User).filter_by(email=client_id).first()
     else:
+        print("Retrieving User by Username")
         user = session.query(User).filter_by(username=client_id).first()
 
     if user is None:
         print(f"No user exists with username/email: {client_id}")
         return None
     else:
+        print("A user exists with given client ID.")
         if bcrypt.checkpw(client_secret, user.password):
+            print("User credentials valid.")
             iat = int(datetime.utcnow().timestamp())
             exp = iat + 3600
 
@@ -69,6 +75,7 @@ def get_jwt_private_key(secretsmanager: SecretsManagerClient, env: str) -> str:
     :param env: Environment of the SaintsXCTF authentication private key.
     :return: A string representing the RSA encrypted private key.
     """
+    print("Getting JWT Private Key")
     secret = secretsmanager.get_secret_value(SecretId=f"saints-xctf-auth-{env}")
 
     secret_string = secret.get('SecretString')
@@ -83,6 +90,7 @@ def get_rds_credentials(secretsmanager: SecretsManagerClient, env: str) -> dict:
     :param env: Environment of the SaintsXCTF database.
     :return: A dictionary containing username and password keys.
     """
+    print("Getting RDS Credentials")
     response = secretsmanager.get_secret_value(SecretId=f'saints-xctf-rds-{env}-secret')
     secret_string = response.get("SecretString")
     return json.loads(secret_string)
@@ -96,6 +104,7 @@ def create_database_session(rds: RDSClient, db_secret: dict, env: str) -> Any:
     :param env: Environment of the SaintsXCTF database.
     :return: A session with the database.
     """
+    print("Creating Database Session")
     rds_instances = rds.describe_db_instances(DBInstanceIdentifier=f'saints-xctf-mysql-database-{env}')
     instance = rds_instances.get('DBInstances')[0]
     hostname = instance.get('Endpoint').get('Address')

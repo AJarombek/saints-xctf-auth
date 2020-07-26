@@ -16,6 +16,7 @@ from boto3_type_annotations.secretsmanager import Client
 def lambda_handler(event, context):
     token = event['token']
     env = os.environ['ENV']
+    print(f"Token: {token}, Environment: {env}")
 
     secretsmanager: Client = boto3.client('secretsmanager')
     secret = secretsmanager.get_secret_value(SecretId=f"saints-xctf-auth-{env}")
