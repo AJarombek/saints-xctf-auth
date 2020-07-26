@@ -8,6 +8,22 @@ Lambda functions used for authentication in the SaintsXCTF application.  Some of
 the ``auth.saintsxctf.com`` domain (which is located behind API Gateway).  Others are standalone, used for purposes like
 AWS Secrets Manager secret rotation or API Gateway lambda authorizers.
 
+CI/CD
+-----
+
+There are multiple Jenkins jobs for the ``auth.saintsxctf.com`` application.
+
+- [`push-authenticate-lambda-image`](http://jenkins.jarombek.io/job/saints-xctf/job/auth/job/push-authenticate-lambda-image/)
+Pushes a Docker image to DockerHub for the ``authenticate`` Lambda function.
+- [`push-authorizer-lambda-image`](http://jenkins.jarombek.io/job/saints-xctf/job/auth/job/push-authorizer-lambda-image/)
+Pushes a Docker image to DockerHub for the ``authorizer`` Lambda function.
+- [`push-rotate-lambda-image`](http://jenkins.jarombek.io/job/saints-xctf/job/auth/job/push-rotate-lambda-image/)
+Pushes a Docker image to DockerHub for the ``rotate`` Lambda function.
+- [`push-token-lambda-image`](http://jenkins.jarombek.io/job/saints-xctf/job/auth/job/push-token-lambda-image/)
+Pushes a Docker image to DockerHub for the ``token`` Lambda function.
+
+There are additional Jenkins jobs for building the SaintsXCTF Auth AWS infrastructure.
+
 Commands
 --------
 

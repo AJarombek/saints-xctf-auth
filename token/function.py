@@ -27,8 +27,8 @@ def lambda_handler(event, context):
     env = os.environ['ENV']
     print(f"Client: {client_id}, Environment: {env}")
 
-    secretsmanager: SecretsManagerClient = boto3.client('secretsmanager')
-    rds: RDSClient = boto3.client('rds')
+    secretsmanager: SecretsManagerClient = boto3.client('secretsmanager', region_name='us-east-1')
+    rds: RDSClient = boto3.client('rds', region_name='us-east-1')
 
     private_key = get_jwt_private_key(secretsmanager, env)
     db_secret = get_rds_credentials(secretsmanager, env)
