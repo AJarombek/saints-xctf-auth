@@ -1,5 +1,6 @@
 bcrypt
 boto3_type_annotations
+cryptography
 pyjwt
 pymysql
 sqlalchemy

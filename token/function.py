@@ -49,7 +49,7 @@ def lambda_handler(event, context):
         return None
     else:
         print("A user exists with given client ID.")
-        if bcrypt.checkpw(client_secret, user.password):
+        if bcrypt.checkpw(client_secret.encode('utf-8'), user.password.encode('utf-8')):
             print("User credentials valid.")
             iat = int(datetime.utcnow().timestamp())
             exp = iat + 3600

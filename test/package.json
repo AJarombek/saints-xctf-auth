@@ -14,5 +14,8 @@
     "Jest"
   ],
   "author": "Andrew Jarombek",
-  "license": "ISC"
+  "license": "ISC",
+  "jest": {
+    "testEnvironment": "node"
+  }
 }

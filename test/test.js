@@ -4,16 +4,19 @@
  * @since 7/17/2020
  */
 
-import axios from 'axios';
+const axios = require('axios');
 
 const instance = axios.create({
     baseURL: process.env.TEST_ENV === 'prod' ? 'https://auth.saintsxctf.com' : 'https://dev.auth.saintsxctf.com',
-    timeout: 1000
+    timeout: 5000
 });
+
+const jwtPattern = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
 
 describe('authenticate api', () => {
 
-    it('returns 403 by default', () => {
+    it.skip('returns 403 by default', () => {
+        expect.assertions(1);
         instance
             .post('/authenticate')
             .then((res) => {
@@ -28,15 +31,34 @@ describe('authenticate api', () => {
 
 describe('token api', () => {
 
-    it('returns 403 by default', () => {
-        instance
+    it.skip('returns 500 by default', () => {
+        return instance
             .post('/token')
-            .then((res) => {
+            .then(() => {
+                // 'then' block should not be called.
                 expect(true).toBe(false);
             })
             .catch((err) => {
                 console.info(err);
-                expect(err.message).toEqual("Forbidden");
+                expect(err.message).toEqual("Missing Authentication Token");
+            });
+    });
+
+    it('returns a jwt when valid credentials are provided', () => {
+        return instance
+            .post('/token', {
+                clientId: 'andy',
+                clientSecret: process.env.CLIENT_SECRET
+            })
+            .then((res) => {
+                console.info(res.data);
+
+                const result = JSON.parse(res.data).result;
+                expect(result).toMatch(jwtPattern);
+            })
+            .catch((err) => {
+                // 'catch' block should not be called.
+                expect(true).toBe(false);
             });
     });
 });
