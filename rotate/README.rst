@@ -33,20 +33,20 @@ Commands
     docker image build \
         -f ../Dockerfile \
         -t python-lambda-dist:latest \
-        --build-arg ZIP_FILENAME=SaintsXCTFToken .
+        --build-arg ZIP_FILENAME=SaintsXCTFRotate .
 
-    docker image build -t token-lambda-dist:latest .
+    docker image build -t rotate-lambda-dist:latest .
 
     docker container run -d  \
-        --name token-lambda-dist \
+        --name rotate-lambda-dist \
         --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
         --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
-        token-lambda-dist:latest
+        rotate-lambda-dist:latest
 
-    docker cp token-lambda-dist:/dist .
+    docker cp rotate-lambda-dist:/dist .
 
-    docker container stop token-lambda-dist
-    docker container rm token-lambda-dist
+    docker container stop rotate-lambda-dist
+    docker container rm rotate-lambda-dist
 
 **For Reference: Local Steps with Virtual Environment**
 

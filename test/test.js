@@ -13,34 +13,18 @@ const instance = axios.create({
 
 const jwtPattern = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
 
-describe('authenticate api', () => {
-
-    it.skip('returns 403 by default', () => {
-        expect.assertions(1);
-        instance
-            .post('/authenticate')
-            .then((res) => {
-                expect(true).toBe(false);
-            })
-            .catch((err) => {
-                console.info(err);
-                expect(err.message).toEqual("Forbidden");
-            });
-    });
-});
-
 describe('token api', () => {
 
-    it.skip('returns 500 by default', () => {
+    it('returns an empty string by default', () => {
         return instance
-            .post('/token')
-            .then(() => {
-                // 'then' block should not be called.
-                expect(true).toBe(false);
+            .post('/token', {})
+            .then((res) => {
+                console.info(res.data);
+                expect(res.data.result).toEqual("");
             })
             .catch((err) => {
-                console.info(err);
-                expect(err.message).toEqual("Missing Authentication Token");
+                // 'catch' block should not be called.
+                expect(true).toBe(false);
             });
     });
 
@@ -52,9 +36,61 @@ describe('token api', () => {
             })
             .then((res) => {
                 console.info(res.data);
+                expect(res.data.result).toMatch(jwtPattern);
+            })
+            .catch((err) => {
+                // 'catch' block should not be called.
+                expect(true).toBe(false);
+            });
+    });
+});
 
-                const result = JSON.parse(res.data).result;
-                expect(result).toMatch(jwtPattern);
+describe('authenticate api', () => {
+
+    it('returns an empty string by default', () => {
+        return instance
+            .post('/authenticate', {})
+            .then((res) => {
+                console.info(res.data);
+                expect(res.data.result).toEqual(false);
+            })
+            .catch((err) => {
+                // 'catch' block should not be called.
+                expect(true).toBe(false);
+            });
+    });
+
+    it('returns false if the jwt is invalid', () => {
+        return instance
+            .post('/authenticate', {
+                token: 'a.b.c'
+            })
+            .then((res) => {
+                console.info(res.data);
+                expect(res.data.result).toEqual(false);
+            })
+            .catch((err) => {
+                // 'catch' block should not be called.
+                expect(true).toBe(false);
+            });
+    });
+
+    it('returns true if the jwt is valid', () => {
+        return instance
+            .post('/token', {
+                clientId: 'andy',
+                clientSecret: process.env.CLIENT_SECRET
+            })
+            .then((res) => {
+                return instance.post(
+                    '/authenticate',
+                    {
+                        token: res.data.result
+                    })
+            })
+            .then((res) => {
+                console.info(res.data);
+                expect(res.data.result).toEqual(true);
             })
             .catch((err) => {
                 // 'catch' block should not be called.

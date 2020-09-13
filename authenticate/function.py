@@ -32,11 +32,11 @@ def lambda_handler(event, context):
             algorithms='RS256',
             options={'require': ['exp', 'iat', 'iss']}
         )
-        return {'valid': True}
+        return True
     except jwt.ExpiredSignatureError:
         print("This token has expired.")
-        return {'valid': False}
+        return False
     except Exception as e:
         print("The token is invalid.")
         traceback.print_exception(type(e), e, e.__traceback__)
-        return {'valid': False}
+        return False
