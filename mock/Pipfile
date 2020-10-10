@@ -1,0 +1,17 @@
+# Dependencies and environment for a mocked implementation of the auth.saintsxctf.com lambda functions.  This is used
+# for API testing.
+# Author: Andrew Jarombek
+# Date: 10/9/2020
+
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+flask = ">=1.1.2"
+
+[requires]
+python_version = "3.9"

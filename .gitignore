@@ -4,3 +4,4 @@ rotate/venv
 dist
 bazel-*
 **/node_modules
+**/__pycache__

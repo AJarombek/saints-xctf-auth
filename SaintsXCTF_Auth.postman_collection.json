@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "98845a2a-b585-4fdb-acd0-9b7df81a3576",
+		"name": "SaintsXCTF Auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "authenticate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MDIyMTMwMDYsImV4cCI6MTYwMjIxNjYwNiwiaXNzIjoiYXV0aC5zYWludHN4Y3RmLmNvbSJ9.ZPu4kB2xYHkMJ6NKTE5_6MXEFY2AXWHXg2N6UWPSQvdxbOzuwRIQqkV96OM-oy8cHepPLnY6-TA6IBclRuGgA44FZe5G6MjlHwpEXVTA4Rat0vH_ccoRiyVCzyH-X7DocIQheEoIx7MRteeAZ4g0KSgkxK2Dj4OdsOP0n0XdRrPZYztrILoesm-6BSeL-ODVZ89y2ps-idGqL6-GRZO_pvaF4U7__N9y1-8rqgkg6MNMCH3D4YxAVjUtwj3e35ItdnLz0fT6bWd0hbeW83LdoJRLim5DxxmuawiJ95NtszRei6UCg9_TXbrbQ29xI41XBgoKj-LF0xC-fJLsFNSSGw\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://dev.auth.saintsxctf.com/authenticate",
+					"protocol": "https",
+					"host": [
+						"dev",
+						"auth",
+						"saintsxctf",
+						"com"
+					],
+					"path": [
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"clientId\": \"andy\",\n    \"clientSecret\": \"xx\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://dev.auth.saintsxctf.com/token",
+					"protocol": "https",
+					"host": [
+						"dev",
+						"auth",
+						"saintsxctf",
+						"com"
+					],
+					"path": [
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "token mock",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"clientId\": \"andy\",\n    \"clientSecret\": \"xx\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authenticate mock",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"j.w.t\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/authenticate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
