@@ -12,6 +12,7 @@ verify_ssl = true
 
 [packages]
 flask = ">=1.1.2"
+uwsgi = ">=2.0.19.1"
 
 [requires]
 python_version = "3.9"
