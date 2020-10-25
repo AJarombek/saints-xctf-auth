@@ -39,26 +39,38 @@ Commands
     bazel run //:generate_authorizer_lambda_zip_file
     bazel run //:generate_authenticate_lambda_zip_file
 
+**Run the mocked API locally**
+
+.. code-block:: bash
+
+    docker-compose -f docker-compose.yml up --build
+
 Files
 -----
 
-+-----------------------------+----------------------------------------------------------------------------------------------+
-| Filename                    | Description                                                                                  |
-+=============================+==============================================================================================+
-| ``Dockerfile``              | Used for building Python 3.8 AWS Lambda functions in an Amazon Linux environment.            |
-+-----------------------------+----------------------------------------------------------------------------------------------+
-| ``authenticate``            | AWS Lambda function which authenticates a JWT token for application users.                   |
-+-----------------------------+----------------------------------------------------------------------------------------------+
-| ``authorizer``              | AWS Lambda function which allows or denies API Gateway to call another AWS Lambda function.  |
-+-----------------------------+----------------------------------------------------------------------------------------------+
-| ``rotate``                  | AWS Lambda function which rotates a secret that is used to create JWTs in Secrets Manager.   |
-+-----------------------------+----------------------------------------------------------------------------------------------+
-| ``token``                   | AWS Lambda function which creates a JWT token if valid user credentials are supplied.        |
-+-----------------------------+----------------------------------------------------------------------------------------------+
-| ``test``                    | E2E Tests for the Auth API in development and production environments.                       |
-+-----------------------------+----------------------------------------------------------------------------------------------+
-| ``mock``                    | Mocked implementation of the Auth API for testing purposes.                                  |
-+-----------------------------+----------------------------------------------------------------------------------------------+
++-------------------------------+----------------------------------------------------------------------------------------------+
+| Filename                      | Description                                                                                  |
++===============================+==============================================================================================+
+| ``build.sh``                  | Bash commands to create lambda function zip files with Docker.                               |
++-------------------------------+----------------------------------------------------------------------------------------------+
+| ``docker-compose.yml``        | Docker compose file for hosting the mocked version of the auth API locally.                  |
++-------------------------------+----------------------------------------------------------------------------------------------+
+| ``Dockerfile``                | Used for building Python 3.8 AWS Lambda functions in an Amazon Linux environment.            |
++-------------------------------+----------------------------------------------------------------------------------------------+
+| ``*.postman_collection.json`` | Postman collection for making API calls to ``auth.saintsxctf.com``.                          |
++-------------------------------+----------------------------------------------------------------------------------------------+
+| ``authenticate``              | AWS Lambda function which authenticates a JWT token for application users.                   |
++-------------------------------+----------------------------------------------------------------------------------------------+
+| ``authorizer``                | AWS Lambda function which allows or denies API Gateway to call another AWS Lambda function.  |
++-------------------------------+----------------------------------------------------------------------------------------------+
+| ``rotate``                    | AWS Lambda function which rotates a secret that is used to create JWTs in Secrets Manager.   |
++-------------------------------+----------------------------------------------------------------------------------------------+
+| ``token``                     | AWS Lambda function which creates a JWT token if valid user credentials are supplied.        |
++-------------------------------+----------------------------------------------------------------------------------------------+
+| ``test``                      | E2E Tests for the Auth API in development and production environments.                       |
++-------------------------------+----------------------------------------------------------------------------------------------+
+| ``mock``                      | Mocked implementation of the Auth API for testing purposes.                                  |
++-------------------------------+----------------------------------------------------------------------------------------------+
 
 Resources
 ---------

@@ -1,0 +1,17 @@
+# Docker Compose configuration for the mocked SaintsXCTF Auth API on the same network as the API and web application.
+# Author: Andrew Jarombek
+# Date: 10/24/2020
+
+version: '3.7'
+services:
+  saints-xctf-auth:
+    domainname: saints-xctf-auth
+    image: ajarombek/mock-saints-xctf-auth
+    ports:
+      - 5001:5000
+    networks:
+      - docker-compose_saints-xctf-api-net
+
+networks:
+  docker-compose_saints-xctf-api-net:
+    external: true
