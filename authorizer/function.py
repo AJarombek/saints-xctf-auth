@@ -46,8 +46,8 @@ def lambda_handler(event, context):
 
 def allow_policy(method_arn: str) -> dict:
     return {
-        "PrincipalId": "apigateway.amazonaws.com",
-        "PolicyDocument": {
+        "principalId": "apigateway.amazonaws.com",
+        "policyDocument": {
             "Version": "2012-10-17",
             "Statement": [
                 {
@@ -62,8 +62,8 @@ def allow_policy(method_arn: str) -> dict:
 
 def deny_policy() -> dict:
     return {
-        "PrincipalId": "*",
-        "PolicyDocument": {
+        "principalId": "*",
+        "policyDocument": {
             "Version": "2012-10-17",
             "Statement": [
                 {
