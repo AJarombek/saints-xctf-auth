@@ -31,3 +31,8 @@ Files
 +-----------------------------+----------------------------------------------------------------------------------------------+
 | ``requirements.txt``        | Pip dependencies for the AWS Lambda function.                                                |
 +-----------------------------+----------------------------------------------------------------------------------------------+
+
+Resources
+---------
+
+1) `JWT Token Claims <https://auth0.com/docs/tokens/json-web-tokens/json-web-token-claims>`_

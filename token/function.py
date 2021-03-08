@@ -58,7 +58,10 @@ def lambda_handler(event, context):
                 payload={
                     'iat': iat,
                     'exp': exp,
-                    'iss': 'auth.saintsxctf.com'
+                    'iss': 'auth.saintsxctf.com',
+                    'sub': user.username,
+                    'email': user.email,
+                    'name': f'{user.first} {user.last}'
                 },
                 key=private_key,
                 algorithm='RS256'
