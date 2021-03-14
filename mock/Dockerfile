@@ -13,11 +13,10 @@ COPY . .
 RUN pip install pipenv \
     && pipenv install --system
 
-ARG ID=andy
-ARG SECRET=default
+RUN ssh-keygen -q -t rsa -N '' -f jwt_rsa <<<y 2>&1 >/dev/null
 
-ENV SXCTF_AUTH_ID=$ID
-ENV SXCTF_AUTH_SECRET=$SECRET
+ARG ENV=local
+ENV DB_ENV=$ENV
 
 STOPSIGNAL SIGTERM
 EXPOSE 5000
