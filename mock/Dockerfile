@@ -13,7 +13,7 @@ COPY . .
 RUN pip install pipenv \
     && pipenv install --system
 
-RUN ssh-keygen -q -t rsa -N '' -f jwt_rsa <<<y 2>&1 >/dev/null
+RUN yes 'y' | ssh-keygen -q -N '' -t rsa -f jwt_rsa
 
 ARG ENV=local
 ENV DB_ENV=$ENV

@@ -5,3 +5,5 @@ dist
 bazel-*
 **/node_modules
 **/__pycache__
+mock/jwt_rsa
+mock/jwt_rsa.pub

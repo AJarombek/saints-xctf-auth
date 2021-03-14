@@ -18,6 +18,12 @@ from User import User
 
 app = Flask(__name__)
 
+with open('jwt_rsa', 'r') as file:
+    private_key = file.read()
+
+with open('jwt_rsa.pub', 'r') as file:
+    public_key = file.read()
+
 
 @app.route('/', methods=['GET'])
 def entry():
@@ -97,3 +103,8 @@ def token():
         jwt_token = ''
 
     return jsonify({'result': jwt_token})
+
+
+if __name__ == '__main__':
+    # For non-prod environments, run with 'python main.py' instead of 'flask run' to use this custom port.
+    app.run(port=5001)

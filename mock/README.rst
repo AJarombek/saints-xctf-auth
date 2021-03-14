@@ -11,9 +11,16 @@ Commands
 
 .. code-block:: bash
 
+    # setup virtual environment
+    pipenv shell
+    pipenv install
     flask --version
-    export SXCTF_AUTH_ID=andy
-    export SXCTF_AUTH_SECRET=xx
+
+    # Create public and private keys
+    ssh-keygen -q -t rsa -N '' -f jwt_rsa <<<y 2>&1 >/dev/null
+
+    # Set environment variables
+    export DB_ENV=local
     export FLASK_APP=main.py
     flask run
 
@@ -25,8 +32,7 @@ Commands
     docker container stop saints-xctf-auth-mock
     docker container rm saints-xctf-auth-mock
     docker image build \
-        --build-arg ID=andy \
-        --build-arg SECRET=$password \
+        --build-arg ENV=local \
         -t saints-xctf-auth-mock:latest \
         --network=host .
 
