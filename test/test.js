@@ -68,6 +68,18 @@ describe('token api', () => {
                 const payloadObject = JSON.parse(payloadBuffer.toString('utf-8'));
 
                 expect(Object.keys(payloadObject)).toEqual(['iat', 'exp', 'iss', 'sub', 'email', 'name']);
+
+                expect(typeof payloadObject['iat']).toEqual('number');
+                expect(typeof payloadObject['exp']).toEqual('number');
+                expect(typeof payloadObject['iss']).toEqual('string');
+                expect(typeof payloadObject['sub']).toEqual('string');
+                expect(typeof payloadObject['email']).toEqual('string');
+                expect(typeof payloadObject['name']).toEqual('string');
+
+                expect(payloadObject['iss']).toEqual('auth.saintsxctf.com');
+                expect(payloadObject['sub']).toEqual('andy');
+                expect(payloadObject['email']).toEqual('andrew@jarombek.com');
+                expect(payloadObject['name']).toEqual('Andy Jarombek');
             })
             .catch((err) => {
                 console.error(err);
@@ -131,7 +143,7 @@ describe('authenticate api', () => {
             })
             .catch((err) => {
                 console.error(err);
-                
+
                 // 'catch' block should not be called.
                 expect(true).toBe(false);
             });
