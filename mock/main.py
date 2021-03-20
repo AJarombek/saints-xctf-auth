@@ -19,10 +19,10 @@ from User import User
 app = Flask(__name__)
 
 with open('jwt_rsa', 'r') as file:
-    private_key = file.read()
+    private_key = file.read().strip()
 
 with open('jwt_rsa.pub', 'r') as file:
-    public_key = file.read()
+    public_key = file.read().strip()
 
 
 @app.route('/', methods=['GET'])

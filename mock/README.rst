@@ -16,8 +16,9 @@ Commands
     pipenv install
     flask --version
 
-    # Create public and private keys
-    ssh-keygen -q -t rsa -N '' -f jwt_rsa <<<y 2>&1 >/dev/null
+    # Create public and private keys (must use openssl)
+    openssl genrsa -out jwt_rsa 4096
+    openssl rsa -in jwt_rsa -pubout > jwt_rsa.pub
 
     # Set environment variables
     export DB_ENV=local
