@@ -23,6 +23,8 @@ describe('token api', () => {
                 expect(res.data.result).toEqual("");
             })
             .catch((err) => {
+                console.error(err);
+
                 // 'catch' block should not be called.
                 expect(true).toBe(false);
             });
@@ -39,6 +41,37 @@ describe('token api', () => {
                 expect(res.data.result).toMatch(jwtPattern);
             })
             .catch((err) => {
+                console.error(err);
+
+                // 'catch' block should not be called.
+                expect(true).toBe(false);
+            });
+    });
+
+    it('the jwt is well structured', () => {
+        return instance
+            .post('/token', {
+                clientId: 'andy',
+                clientSecret: process.env.CLIENT_SECRET
+            })
+            .then((res) => {
+                const [header, payload, _] = res.data.result.split('.');
+
+                const headerBuffer = new Buffer(header, 'base64');
+                const headerObject = JSON.parse(headerBuffer.toString('utf-8'));
+
+                expect(headerObject['typ']).toEqual('JWT');
+                expect(headerObject['alg']).toEqual('RS256');
+                expect(Object.keys(headerObject)).toEqual(['typ', 'alg']);
+
+                const payloadBuffer = new Buffer(payload, 'base64');
+                const payloadObject = JSON.parse(payloadBuffer.toString('utf-8'));
+
+                expect(Object.keys(payloadObject)).toEqual(['iat', 'exp', 'iss', 'sub', 'email', 'name']);
+            })
+            .catch((err) => {
+                console.error(err);
+
                 // 'catch' block should not be called.
                 expect(true).toBe(false);
             });
@@ -55,6 +88,8 @@ describe('authenticate api', () => {
                 expect(res.data.result).toEqual(false);
             })
             .catch((err) => {
+                console.error(err);
+
                 // 'catch' block should not be called.
                 expect(true).toBe(false);
             });
@@ -70,6 +105,8 @@ describe('authenticate api', () => {
                 expect(res.data.result).toEqual(false);
             })
             .catch((err) => {
+                console.error(err);
+
                 // 'catch' block should not be called.
                 expect(true).toBe(false);
             });
@@ -93,6 +130,8 @@ describe('authenticate api', () => {
                 expect(res.data.result).toEqual(true);
             })
             .catch((err) => {
+                console.error(err);
+                
                 // 'catch' block should not be called.
                 expect(true).toBe(false);
             });

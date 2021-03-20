@@ -12,6 +12,7 @@ verify_ssl = true
 
 [packages]
 bcrypt = ">=3.2.0"
+cryptography = ">=3.4.6"
 flask = ">=1.1.2"
 pyjwt = ">=2.0.1"
 pymysql = ">=1.0.2"

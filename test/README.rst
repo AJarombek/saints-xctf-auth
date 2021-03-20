@@ -3,6 +3,17 @@ Overview
 
 E2E tests written in Node.js and Jest for the SaintsXCTF Auth API.
 
+Commands
+--------
+
+.. code-block:: bash
+
+    nvm use v13.9.0
+    npm install
+    export TEST_ENV=dev
+    export CLIENT_SECRET=xxxx
+    npm test
+
 Files
 -----
 
