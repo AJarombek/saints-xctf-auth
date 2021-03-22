@@ -102,6 +102,7 @@ def token():
     else:
         jwt_token = ''
 
+    session.close()
     return jsonify({'result': jwt_token})
 
 
