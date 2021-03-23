@@ -11,12 +11,14 @@ from datetime import datetime
 import jwt
 import bcrypt
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from User import User
 
 app = Flask(__name__)
+CORS(app)
 
 with open('jwt_rsa', 'r') as file:
     private_key = file.read().strip()
