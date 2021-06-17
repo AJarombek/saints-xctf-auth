@@ -52,7 +52,7 @@ def lambda_handler(event, context):
         if bcrypt.checkpw(client_secret.encode('utf-8'), user.password.encode('utf-8')):
             print("User credentials valid.")
             iat = int(datetime.utcnow().timestamp())
-            exp = iat + 3600
+            exp = iat + 2419200
 
             return jwt.encode(
                 payload={

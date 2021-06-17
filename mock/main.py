@@ -1,5 +1,5 @@
 """
-Mocked implementation of routes for auth.saintsxctf.com.  This is only used for API testing.
+Mocked implementation of routes for auth.saintsxctf.com.  This is only used for API testing and local environments.
 Author: Andrew Jarombek
 Date: 10/10/2020
 """

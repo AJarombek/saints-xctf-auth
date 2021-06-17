@@ -1,5 +1,5 @@
 # Dependencies and environment for a mocked implementation of the auth.saintsxctf.com lambda functions.  This is used
-# for API testing.
+# for API testing and local environments.
 # Author: Andrew Jarombek
 # Date: 10/9/2020
 

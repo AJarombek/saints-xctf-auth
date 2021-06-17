@@ -107,6 +107,24 @@ Files
 | ``mock``                      | Mocked implementation of the Auth API for testing purposes.                                  |
 +-------------------------------+----------------------------------------------------------------------------------------------+
 
+Version History
+---------------
+
+`v2.0.1 <https://github.com/AJarombek/saints-xctf-auth/tree/v2.0.1>`_ - Authentication Token Time Increase
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Release Date: June 16th, 2021
+
+Per request from the team, authentication tokens expire after four weeks instead of one hour.
+
+
+`v2.0.0 <https://github.com/AJarombek/saints-xctf-auth/tree/v2.0.0>`_ - SaintsXCTF Authentication API Initial Release
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Release Date: May 30th, 2021
+
+Official release of the SaintsXCTF Authentication API.
+
 Resources
 ---------
 
