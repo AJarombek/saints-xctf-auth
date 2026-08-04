@@ -10,69 +10,19 @@ Lambda functions used for authentication in the SaintsXCTF application.  Some of
 the ``auth.saintsxctf.com`` domain (which is located behind API Gateway).  Others are standalone, used for purposes like
 AWS Secrets Manager secret rotation or API Gateway lambda authorizers.
 
-Integrations
-------------
-
-There are multiple Jenkins jobs for the ``auth.saintsxctf.com`` application.
-
-.. image:: https://img.shields.io/badge/Jenkins-saints--xctf--auth--test-blue?style=for-the-badge
-   :target: https://jenkins.jarombek.io/job/saints-xctf/job/auth/job/saints-xctf-auth-test/
-
-----
-
-Test the ``auth.saintsxctf.com`` API.
-
-.. image:: https://img.shields.io/badge/Jenkins-push--authenticate--lambda--image-blue?style=for-the-badge
-   :target: https://jenkins.jarombek.io/job/saints-xctf/job/auth/job/push-authenticate-lambda-image/
-
-----
-
-Pushes a Docker image to DockerHub for the ``authenticate`` Lambda function.
-
-.. image:: https://img.shields.io/badge/Jenkins-push--authorizer--lambda--image-blue?style=for-the-badge
-   :target: https://jenkins.jarombek.io/job/saints-xctf/job/auth/job/push-authorizer-lambda-image/
-
-----
-
-Pushes a Docker image to DockerHub for the ``authorizer`` Lambda function.
-
-.. image:: https://img.shields.io/badge/Jenkins-push--rotate--lambda--image-blue?style=for-the-badge
-   :target: https://jenkins.jarombek.io/job/saints-xctf/job/auth/job/push-rotate-lambda-image/
-
-----
-
-Pushes a Docker image to DockerHub for the ``rotate`` Lambda function.
-
-.. image:: https://img.shields.io/badge/Jenkins-push--token--lambda--image-blue?style=for-the-badge
-   :target: http://jenkins.jarombek.io/job/saints-xctf/job/auth/job/push-token-lambda-image/
-
-----
-
-Pushes a Docker image to DockerHub for the ``token`` Lambda function.
-
-.. image:: https://img.shields.io/badge/Jenkins-push--mock--lambda--image-blue?style=for-the-badge
-   :target: https://jenkins.jarombek.io/job/saints-xctf/job/auth/job/push-mock-auth-image/
-
-----
-
-Pushes a Docker image to DockerHub for a mocked implementation of the ``auth.saintsxctf.com`` API.
-
-There are additional Jenkins jobs for building the SaintsXCTF Auth AWS infrastructure.
-
 Commands
 --------
 
-**Create all AWS Lambda zip files with Bazel**
+**Create all AWS Lambda zip files with Make**
 
 .. code-block:: bash
 
-    bazel clean
-    bazel build //:all
+    make all
 
-    bazel run //:generate_token_lambda_zip_file
-    bazel run //:generate_rotate_lambda_zip_file
-    bazel run //:generate_authorizer_lambda_zip_file
-    bazel run //:generate_authenticate_lambda_zip_file
+    make token-lambda-dist
+    make rotate-lambda-dist
+    make authorizer-lambda-dist
+    make authenticate-lambda-dist
 
 **Run the mocked API locally**
 
