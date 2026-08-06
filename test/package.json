@@ -4,7 +4,7 @@
   "description": "E2E Tests of the SaintsXCTF Auth Endpoints",
   "main": "test.js",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "jest": "^26.1.0"
   },
   "scripts": {
